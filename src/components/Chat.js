@@ -7,8 +7,6 @@ import { history } from '../routers/AppRouter';
 import moment from 'moment';
 // console.log(user);
 
-
-
 const database = fire.database();
 
 class Chat extends Component {
@@ -21,10 +19,10 @@ class Chat extends Component {
   }
 
   logout = () => {
-    console.log('log out from chat')
+    console.log('log out from chat');
     fire.auth().signOut();
     history.push('/');
-  }
+  };
 
   componentWillMount() {
     console.log('component did mount');
@@ -43,9 +41,20 @@ class Chat extends Component {
     });
   }
 
-  onEnterHandler = (event) => {
-    if (event.target.value.trim().length !== 0) {   // any better way of handling situation???
-      console.log('onEnterHandler triggered.')
+  componentDidMount() {
+    console.log('componentDidMount triggered.');
+  }
+
+  componentDidUpdate() {
+    const chatBox = document.getElementById('chat-box');
+    chatBox.scrollTop = chatBox.scrollHeight;
+    // https://stackoverflow.com/questions/270612/scroll-to-bottom-of-div
+  }
+
+  onEnterHandler = event => {
+    if (event.target.value.trim().length !== 0) {
+      // any better way of handling situation???
+      console.log('onEnterHandler triggered.');
       database
         .ref('/messages')
         .push()
@@ -56,7 +65,7 @@ class Chat extends Component {
       this.setState({
         newMessage: {}
       });
-      event.target.value = "";
+      event.target.value = '';
     }
 
     // console.log('onEnterHandler triggered.')
@@ -71,11 +80,11 @@ class Chat extends Component {
     //   newMessage: {}
     // });
     // event.target.value = "";
-  }
-
+  };
 
   render() {
     // console.log(this.state.messages);
+
     return (
       <div className="home-page">
         <header className="main-header">
@@ -93,7 +102,10 @@ class Chat extends Component {
                     </a>
                   </li>
                   <li>
-                    <a className="btn purple modal-trigger" onClick={this.logout}>
+                    <a
+                      className="btn purple modal-trigger"
+                      onClick={this.logout}
+                    >
                       Logout
                     </a>
                   </li>
@@ -106,12 +118,29 @@ class Chat extends Component {
         <section className="section section-chat">
           <div className="container">
             <div className="row">
-              <div className="chat-box col s12 white purple-text ">
-
-                {this.state.messagesItem.map((Item) => {
-                  return <p className="messageString" key={Item.messageItem.message}> {Item.messageItem.message} <span> {Item.messageItem.timeStamp}</span></p>
-                })}
-
+              <div
+                className="chat-box col s12 white purple-text "
+                id="chat-box"
+              >
+                {this.state.messagesItem.length === 0 ? (
+                  <div>
+                    <p> Just a quick second, Boss. </p>
+                    <p> Loading...</p>
+                  </div>
+                ) : (
+                  this.state.messagesItem.map(Item => {
+                    return (
+                      <p
+                        className="messageString"
+                        key={Item.messageItem.message}
+                      >
+                        {' '}
+                        {Item.messageItem.message}{' '}
+                        <span> {Item.messageItem.timeStamp}</span>
+                      </p>
+                    );
+                  })
+                )}
               </div>
             </div>
           </div>
@@ -125,22 +154,22 @@ class Chat extends Component {
                   id="textarea2"
                   className="materialize-textarea white-text"
                   data-length="120"
-                  onChange={(event) => {
+                  onChange={event => {
                     this.setState({
                       newMessage: {
                         message: event.target.value,
                         time: Date.now()
                       }
-                    })
+                    });
                   }}
-                  onKeyUp={(event) => {
-                    event.which === 13 ? (event) = this.onEnterHandler(event) : null; //Expected an assignment or function call and instead saw an expression
+                  onKeyUp={event => {
+                    event.which === 13
+                      ? (event = this.onEnterHandler(event))
+                      : null; //Expected an assignment or function call and instead saw an expression
                   }}
                 />
-                <label htmlFor="textarea2 white-text">  Your Message...</label>
-
+                <label htmlFor="textarea2 white-text"> Your Message...</label>
               </div>
-
             </div>
           </form>
         </div>

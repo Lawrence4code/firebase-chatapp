@@ -4,9 +4,12 @@ import './index.css';
 import registerServiceWorker from './registerServiceWorker';
 import AppRouter from './routers/AppRouter';
 
-
 ReactDOM.render(<AppRouter />, document.getElementById('root'));
 registerServiceWorker();
+
+if (module.hot) {
+  module.hot.accept();
+}
 
 /*
             <a href="!#" className="button-collapse" data-activates="mobile-nav">

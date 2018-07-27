@@ -13,6 +13,8 @@ const NotFoundPage = () => (
   </div>
 );
 
+console.log('AppRouter');
+
 class AppRouter extends Component {
   constructor(props) {
     super();
@@ -22,19 +24,20 @@ class AppRouter extends Component {
   }
 
   updateUsername = user => {
-    console.log(user);
+    console.log('AppRouter' + user);
   };
 
   render() {
     return (
       <Router history={history}>
         <Switch>
-          <Route path="/" component={Home} exact={true} />
           <Route
-            path="/signup"
-            component={SignUp}
+            path="/"
+            component={Home}
+            exact={true}
             updateUsername={this.updateUsername}
           />
+          <Route path="/signup" component={SignUp} />
           <Route path="/chat" component={Chat} />
           <Route component={NotFoundPage} />
         </Switch>
